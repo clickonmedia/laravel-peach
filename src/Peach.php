@@ -53,7 +53,7 @@ class Peach
             ->post("{$this->baseUrl}/campaigns/{$campaignId}/ads", [
                 [
                     'reference'  => [
-                        'id'   => $name, // REQUIRED: unique id for each ad
+                        'id'   => time() . '-' . $name, // REQUIRED: unique id for each ad
                         'type' => 'Clock ID', // REQUIRED: "Clock ID" is for GB
                     ],
                     'duration'   => $duration, // REQUIRED: format: 00:00:00
