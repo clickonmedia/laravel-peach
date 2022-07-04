@@ -40,7 +40,13 @@ class Peach
         return $this->http->get("{$this->baseUrl}/campaigns/{$campaignId}/ads");
     }
 
-    public function createAd(int $campaignId, string $name, int $seconds)
+    public function createAd(
+        int $campaignId,
+        string $name,
+        int $seconds,
+        string $referenceType = 'Clock ID',
+        string $adType = '16:9 Digital ad'
+    )
     {
         abort_if($seconds > 180, 406, 'Duration cannot be more than 180 seconds or 3 minutes.');
 
@@ -54,11 +60,11 @@ class Peach
                 [
                     'reference'  => [
                         'id'   => $name, // REQUIRED: unique id for each ad
-                        'type' => 'Clock ID', // REQUIRED: "Clock ID" is for GB
+                        'type' => $referenceType, // REQUIRED: "Clock ID" is for GB
                     ],
                     'duration'   => $duration, // REQUIRED: format: 00:00:00
                     'title'      => $name,  // OPTIONAL: but we should pass it
-                    'adType'     => '16:9 Digital ad', // REQUIRED: "16:9 Digital ad" is for MP4
+                    'adType'     => $adType, // REQUIRED: "16:9 Digital ad" is for MP4
                     'regionCode' => config('peach.region_code'),// REQUIRED
                 ],
             ]);
@@ -74,7 +80,7 @@ class Peach
         return $this->http->delete("{$this->baseUrl}/ads/{$adId}");
     }
 
-    public function createAsset(int $adId, string $name, int $size, string $url, $mediaType = 'video')
+    public function createAsset(int $adId, string $name, int $size, string $url, string $mediaType = 'video')
     {
         return $this->http
             ->post("{$this->baseUrl}/ads/{$adId}/assets",
